@@ -8,6 +8,7 @@
 
 import UIKit
 
+@available(iOS 13.0, *)
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
@@ -17,8 +18,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
-//        let tab = UIStoryboard(name: "Auth", bundle: nil).instantiateInitialViewController()!
-//        window?.rootViewController = tab
+        
+        RunLoop.current.run(until: Date(timeIntervalSinceNow: 0.5))
+        if let user_token = helper.getUserToken(){
+            print("user_token: \(user_token)")
+            let tab = UIStoryboard(name: "Home", bundle: nil).instantiateViewController(withIdentifier: "home")
+            window?.rootViewController = tab
+        }
+        
         guard let _ = (scene as? UIWindowScene) else { return }
     }
 

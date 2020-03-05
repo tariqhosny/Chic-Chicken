@@ -8,7 +8,7 @@
 
 import UIKit
 
-class viewRound: UIView {
+class stackRound: UIStackView {
 
     @IBInspectable var cornerRadius: CGFloat = 0{
         didSet{

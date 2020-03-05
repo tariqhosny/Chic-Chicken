@@ -9,20 +9,25 @@
 import UIKit
 import NVActivityIndicatorView
 
-class extrasCart: UIViewController {
+class extrasCart: UIViewController, NVActivityIndicatorViewable  {
     
+    @IBOutlet weak var extraTableView: UITableView!
     @IBOutlet weak var popView: UIView!
     
-    var id = Int()
+    var extras = [productsData]()
+    var cartID = Int()
+    var quantity = Int()
+    var productId = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        indicatorView.isHidden = true
         view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onTap(_:))))
         popView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onTapPop(_:))))
-        indicatorView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onTapPop(_:))))
         
-        commentsTv.placeholder = "Write Comment".localized
+        extraTableView.delegate = self
+        extraTableView.dataSource = self
+        
+        loadExtra()
         // Do any additional setup after loading the view.
     }
     
@@ -35,42 +40,61 @@ class extrasCart: UIViewController {
         print("متدوسش هنا تانى .... يلا يا كوكو متنحش")
     }
     
+    func loadExtra(){
+        self.startAnimating(CGSize(width: 45, height: 45), message: "Loading...",type: .ballSpinFadeLoader, color: .red, textColor: .white)
+        if productId == 0{
+            OrderApis.extraCartApi(id: self.cartID, completion: { (dataError, isSuccess, extra) in
+                if dataError!{
+                    print("data error")
+                    self.stopAnimating()
+                }else{
+                    if isSuccess!{
+                        if let extra = extra?.data{
+                            self.extras = extra
+                            self.extraTableView.reloadData()
+                        }
+                        self.stopAnimating()
+                    }else{
+                        self.stopAnimating()
+                    }
+                }
+            })
+        }else{
+            OrderApis.listOrderExtraApi(orderId: cartID, productId: productId){ (dataError, isSuccess, orders) in
+                if dataError!{
+                    print("data error")
+                    self.stopAnimating()
+                }else{
+                    if isSuccess!{
+                        if let orders = orders?.data{
+                            self.extras = orders
+                            self.extraTableView.reloadData()
+                        }
+                        self.stopAnimating()
+                    }else{
+                        self.showAlert(title: "Connection", message: "Please check your internet connection")
+                        self.stopAnimating()
+                    }
+                }
+            }
+        }
+        
+    }
+    
     @IBAction func closeBtn(_ sender: Any) {
         dismiss(animated: false, completion: nil)
     }
-    
-    @IBAction func orderBtn(_ sender: Any) {
-        activityIndicatorView.startAnimating()
-        indicatorView.isHidden = false
-        
-        guard let phone = phoneTf.text, !phone.isEmpty else {
-            let messages = "Please enter your Phone".localized
-            self.showAlert(title: "Order".localized, message: messages)
-            return
-        }
-        
-        guard let quantity = quantityTf.text, !quantity.isEmpty else {
-            let messages = "Please enter the Quantity".localized
-            self.showAlert(title: "Order".localized, message: messages)
-            return
-        }
-        
-        guard let comments = commentsTv.text, !comments.isEmpty else {
-            let messages = "Please enter your Comments".localized
-            self.showAlert(title: "Order".localized, message: messages)
-            return
-        }
-        print(comments.description)
-        ordersApi.createOrderApi(id: id, phone: phone, quantity: quantity, comment: comments) { (message) in
-            if let message = message.data{
-                let alert = UIAlertController(title: "Order".localized, message: message, preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "Ok".localized, style: .destructive, handler: { (action: UIAlertAction) in
-                    self.dismiss(animated: false, completion: nil)
-                }))
-                self.present(alert, animated: true, completion: nil)
-                print(" \(phone), \(quantity), \(comments), \(self.id)")
-            }
-        }
+}
+extension extrasCart: UITableViewDataSource, UITableViewDelegate{
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return extras.count
     }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "extraCartCell", for: indexPath) as! extraCartCell
+        cell.configure(extra: extras[indexPath.row], quantity: quantity)
+        return cell
+    }
+    
     
 }

@@ -7,8 +7,9 @@
 //
 
 import UIKit
+import NVActivityIndicatorView
 
-class register: UIViewController, UITextFieldDelegate  {
+class register: UIViewController, UITextFieldDelegate, NVActivityIndicatorViewable  {
 
     @IBOutlet weak var nameTf: UITextField!
     @IBOutlet weak var phoneTf: UITextField!
@@ -17,21 +18,11 @@ class register: UIViewController, UITextFieldDelegate  {
     @IBOutlet weak var emailTf: UITextField!
     @IBOutlet weak var passwordTf: UITextField!
     
-    let branches = ["Alex", "Cairo", "Giza", "Mansoura", "Bani-Suif", "Minia", "Assut"]
-    let branchesPicker = UIPickerView()
-    let cityPicker = UIPickerView()
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        cityTf.inputView = cityPicker
-        branchesTf.inputView = branchesPicker
         nameTf.delegate = self
         phoneTf.delegate = self
-        cityPicker.delegate = self
-        cityPicker.dataSource = self
-        branchesPicker.delegate = self
-        branchesPicker.dataSource = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -75,16 +66,6 @@ class register: UIViewController, UITextFieldDelegate  {
             self.showAlert(title: "Register", message: messages)
             return
         }
-        guard let city = cityTf.text, !city.isEmpty else {
-            let messages = "Please select your nearest city"
-            self.showAlert(title: "Register", message: messages)
-            return
-        }
-        guard let branch = branchesTf.text, !branch.isEmpty else {
-            let messages = "Please select your nearest branch"
-            self.showAlert(title: "Register", message: messages)
-            return
-        }
         guard let email = emailTf.text, !email.isEmpty else {
             let messages = "Please enter your email"
             self.showAlert(title: "Register", message: messages)
@@ -105,27 +86,24 @@ class register: UIViewController, UITextFieldDelegate  {
             self.showAlert(title: "Register", message: messages)
             return
         }
-    }
-    
-}
-extension register: UIPickerViewDelegate, UIPickerViewDataSource{
-    func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 1
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return branches.count
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return branches[row]
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        if pickerView == cityPicker{
-            cityTf.text = branches[row]
-        }else{
-            branchesTf.text = branches[row]
+        startAnimating(CGSize(width: 45, height: 45), message: "Loading...",type: .ballSpinFadeLoader, color: .red, textColor: .white)
+        AuthApi.registerApi(name: name, email: email, phone: phone, password: password) { (isSuccess, register) in
+            if isSuccess!{
+                if register?.status ?? false{
+                    if let registerData = register?.data{
+                        helper.saveUserToken(token: registerData.user_token ?? "")
+                        print(helper.getUserToken() ?? "")
+                        helper.restartApp()
+                    }
+                }else{
+                    self.stopAnimating()
+                    self.showAlert(title: "Register", message: "The email has already been taken")
+                }
+            }else{
+                self.showAlert(title: "Connection", message: "Please check your internet connection")
+                self.stopAnimating()
+            }
+            
         }
     }
     

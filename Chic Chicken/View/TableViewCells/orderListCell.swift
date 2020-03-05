@@ -10,15 +10,20 @@ import UIKit
 
 class orderListCell: UITableViewCell {
 
+    @IBOutlet weak var orderIdLb: UILabel!
+    @IBOutlet weak var dateLb: UILabel!
+    @IBOutlet weak var priceLb: UILabel!
+    @IBOutlet weak var orderStateLb: UILabel!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
     }
 
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
+    func configure(order: OrderData){
+        orderIdLb.text = "\(order.order_id ?? 0)"
+        dateLb.text = order.created_at
+        priceLb.text = order.order_total_price
     }
 
 }

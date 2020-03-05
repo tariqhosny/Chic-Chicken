@@ -7,41 +7,63 @@
 //
 
 import UIKit
+import NVActivityIndicatorView
 
-class orderList: UIViewController {
+class orderList: UIViewController, NVActivityIndicatorViewable {
     
+    @IBOutlet weak var ordersCountLb: UILabel!
     @IBOutlet weak var ordersTableView: UITableView!
+    
+    var orders = [OrderData]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         addTitleImage()
-        
+        loadOrders()
         ordersTableView.delegate = self
         ordersTableView.dataSource = self
-        
-//        navigationController?.navigationBar.backItem?.title = " "
-        // Do any additional setup after loading the view.
     }
     
-    override func viewDidDisappear(_ animated: Bool) {
-        navigationController?.navigationBar.backItem?.title = ""
+    func loadOrders(){
+        startAnimating(CGSize(width: 45, height: 45), message: "Loading...",type: .ballSpinFadeLoader, color: .red, textColor: .white)
+        OrderApis.listOrderApi { (dataError, isSuccess, orders) in
+            if dataError!{
+                print("data error")
+                self.stopAnimating()
+            }else{
+                if isSuccess!{
+                    if let orders = orders?.data{
+                        self.orders = orders
+                        self.ordersCountLb.text = "\(self.orders.count)"
+                        self.ordersTableView.reloadData()
+                    }
+                    self.stopAnimating()
+                }else{
+                    self.showAlert(title: "Connection", message: "Please check your internet connection")
+                    self.stopAnimating()
+                }
+            }
+        }
     }
 
 }
 extension orderList: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
+        return orders.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "orderListCell", for: indexPath) as! orderListCell
         cell.selectionStyle = .none
+        cell.configure(order: orders[indexPath.item])
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        performSegue(withIdentifier: "orderDetails", sender: nil)
+        let vc = UIStoryboard.init(name: "Order", bundle: Bundle.main).instantiateViewController(withIdentifier: "orderDetails") as? orderDetails
+        vc?.details = orders[indexPath.item]
+        self.navigationController?.pushViewController(vc!, animated: true)
     }
     
 }

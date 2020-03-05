@@ -10,87 +10,72 @@ import UIKit
 import MOLH
 
 extension UIViewController{
-    func addTitleImage(){
-        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for:.default)
-        self.navigationController?.navigationBar.shadowImage = UIImage()
-        self.navigationController?.navigationBar.layoutIfNeeded()
+    
+    func cartCounter(){
+        OrderApis.listCartApi { (dataError, isSuccess, cart) in
+            if dataError!{
+                self.addBadge(count: 0)
+                print("data error")
+            }else{
+                if isSuccess!{
+                    if let cart = cart?.data?.list{
+                        self.addBadge(count: cart.count)
+                    }
+                }else{
+                    self.addBadge(count: 0)
+                    self.showAlert(title: "Connection", message: "Please check your internet connection")
+                }
+            }
+        }
+    }
+    
+    func addBadge(count: Int) {
+        let bagButton = BadgeButton()
+        bagButton.frame = CGRect(x: 0, y: 0, width: 44, height: 44)
+        bagButton.tintColor = UIColor.white
+        bagButton.setImage(UIImage(named: "shopping-basket"), for: .normal)
+        bagButton.badgeEdgeInsets = UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 5)
+        print("cart Count \(count)")
+        if count != 0{
+            bagButton.badge = "\(count)"
+        }
         
+        bagButton.addTarget(self, action: #selector(self.cartTaped), for: UIControl.Event.touchUpInside)
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: bagButton)
+    }
+    
+    @objc func cartTaped(){
+        let vc = UIStoryboard.init(name: "Order", bundle: Bundle.main).instantiateViewController(withIdentifier: "cart") as? cart
+        self.navigationController?.pushViewController(vc!, animated: true)
+    }
+    
+    func addTitleImage(){
         let navController = navigationController!
         
-        let image = UIImage(named: "logo-1")
+        let image = UIImage(named: "final logo")
         let imageView = UIImageView(image: image)
         
         let bannerWidth = navController.navigationBar.frame.size.width
         let bannerHeight = navController.navigationBar.frame.size.height
         
         let bannerX = bannerWidth / 2 - (image?.size.width)! / 2
-        let bannerY = bannerHeight / 2
+        let bannerY = bannerHeight / 2 - (image?.size.height)! / 2
         
-        imageView.frame = CGRect(x: bannerX, y: bannerY, width: image!.size.width, height: image!.size.height)
+        imageView.frame = CGRect(x: bannerX, y: bannerY, width: image!.size.width, height: bannerHeight)
         imageView.contentMode = .scaleAspectFit
         
         navigationItem.titleView = imageView
     }
     
-    func addCountryBtn() {
-        let countryBtn = UIButton()
-        countryBtn.frame = CGRect(x: 0, y: 0, width: 44, height: 44)
-        countryBtn.tintColor = UIColor.white
-        //egypt vietnam  china  england
-        if helper.getCountryId() == nil{
-            helper.saveCountryId(country: "egypt")
-        }else{
-            if helper.getCountryId() == "egypt"{
-                countryBtn.setImage(#imageLiteral(resourceName: "egypt"), for: .normal)
-            }else if helper.getCountryId() == "china"{
-                countryBtn.setImage(#imageLiteral(resourceName: "china"), for: .normal)
-            }else if helper.getCountryId() == "england"{
-                countryBtn.setImage(#imageLiteral(resourceName: "england"), for: .normal)
-            }else{
-                countryBtn.setImage(#imageLiteral(resourceName: "vietnam"), for: .normal)
-            }
-        }
-        countryBtn.addTarget(self, action: #selector(countryBtnTaped), for: UIControl.Event.touchUpInside)
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: countryBtn)
+    func hideNavigationBar(){
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        navigationController?.navigationBar.shadowImage = UIImage()
+        navigationController?.navigationBar.isTranslucent = true
+        navigationController?.view.backgroundColor = .clear
+        navigationController?.navigationBar.barTintColor = UIColor.gray
     }
     
-    @objc func countryBtnTaped() {
-        //egypt vietnam  china  england
-        let names = ["Egypt", "China", "England", "Vietnam"]
-        let images = ["egypt", "china", "england", "vietnam"]
-        
-        let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        
-        for n in 0...(names.count-1){
-            
-            let action = UIAlertAction(title: names[n], style: .default, handler: { _ in
-                helper.saveCountryId(country: images[n])
-                self.loadView()
-                self.viewDidLoad()
-            })
-            let image = UIImage(named: images[n])
-            action.setValue(image?.withRenderingMode(.alwaysOriginal), forKey: "image")
-            actionSheet.addAction(action)
-        }
-        
-        actionSheet.addAction(UIAlertAction(title: "Cancel".localized, style: .cancel, handler: nil))
-        self.present(actionSheet, animated: true, completion: nil)
-    }
-    
-    func setMenuBtn(menuButton: UIBarButtonItem){
-        if revealViewController() != nil {
-            if MOLHLanguage.currentAppleLanguage() != "ar"{
-                menuButton.target = revealViewController()
-                menuButton.action = #selector(SWRevealViewController.revealToggle(_:))
-            }else{
-                menuButton.target = revealViewController()
-                menuButton.action = #selector(SWRevealViewController.rightRevealToggle(_:))
-            }
-            view.addGestureRecognizer(self.revealViewController().tapGestureRecognizer())
-        }
-    }
-    
-    func showAlert(title: String, message: String, okTitle: String = "Ok".localized, okHandler: ((UIAlertAction)->Void)? = nil) {
+    func showAlert(title: String, message: String, okTitle: String = "Ok", okHandler: ((UIAlertAction)->Void)? = nil) {
         
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: okTitle, style: .cancel, handler: okHandler))
@@ -115,32 +100,32 @@ extension UIViewController{
         return isValid
     }
     
-    func changeLanguage(){
-        let alert = UIAlertController(title: "Select Language".localized, message: "", preferredStyle: UIAlertController.Style.actionSheet)
-        alert.addAction(UIAlertAction(title: "English", style: .destructive, handler: { (action: UIAlertAction) in
-            MOLH.setLanguageTo("en")
-            helper.restartApp()
-        }))
-        alert.addAction(UIAlertAction(title: "中文", style: .destructive, handler: { (action: UIAlertAction) in
-            MOLH.setLanguageTo("zh-Hans")
-            helper.restartApp()
-        }))
-        alert.addAction(UIAlertAction(title: "عربى", style: .destructive, handler: { (action: UIAlertAction) in
-            MOLH.setLanguageTo("ar")
-            helper.restartApp()
-        }))
-        alert.addAction(UIAlertAction(title: NSLocalizedString("Cancel".localized, comment: ""), style: .cancel, handler: nil))
-        self.present(alert, animated: true, completion: nil)
-    }
+//    func changeLanguage(){
+//        let alert = UIAlertController(title: "Select Language".localized, message: "", preferredStyle: UIAlertController.Style.actionSheet)
+//        alert.addAction(UIAlertAction(title: "English", style: .destructive, handler: { (action: UIAlertAction) in
+//            MOLH.setLanguageTo("en")
+//            helper.restartApp()
+//        }))
+//        alert.addAction(UIAlertAction(title: "中文", style: .destructive, handler: { (action: UIAlertAction) in
+//            MOLH.setLanguageTo("zh-Hans")
+//            helper.restartApp()
+//        }))
+//        alert.addAction(UIAlertAction(title: "عربى", style: .destructive, handler: { (action: UIAlertAction) in
+//            MOLH.setLanguageTo("ar")
+//            helper.restartApp()
+//        }))
+//        alert.addAction(UIAlertAction(title: NSLocalizedString("Cancel".localized, comment: ""), style: .cancel, handler: nil))
+//        self.present(alert, animated: true, completion: nil)
+//    }
     
     func logOut(){
-        let alert = UIAlertController(title: "Are you sure you want to log out?".localized, message: "", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Log out".localized, style: .destructive, handler: { (action: UIAlertAction) in
+        let alert = UIAlertController(title: "Are you sure you want to log out?", message: "", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Log out", style: .destructive, handler: { (action: UIAlertAction) in
             let defUser = UserDefaults.standard
             defUser.removeObject(forKey: "user_token")
             helper.restartApp()
         }))
-        alert.addAction(UIAlertAction(title: "Cancel".localized, style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         self.present(alert, animated: true, completion: nil)
     }
     
@@ -149,14 +134,9 @@ extension UIViewController{
         tap.cancelsTouchesInView = false
         navigationController?.navigationBar.addGestureRecognizer(tap)
     }
+    
     @objc func dismissKeyboard() {
         view.endEditing(true)
-    }
-}
-
-extension String{
-    var localized: String{
-        NSLocalizedString(self, comment: "")
     }
 }
 
@@ -230,3 +210,4 @@ extension UITextView: UITextViewDelegate {
     }
     
 }
+

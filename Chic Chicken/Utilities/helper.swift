@@ -24,11 +24,12 @@ class helper: NSObject {
     
     class func restartApp(){
         guard let window = UIApplication.shared.keyWindow else {return}
-        let sb = UIStoryboard(name: "Main", bundle: nil)
         var vc: UIViewController
         if getUserToken() == nil{
+            let sb = UIStoryboard(name: "Main", bundle: nil)
             vc = sb.instantiateInitialViewController()!
         }else{
+            let sb = UIStoryboard(name: "Home", bundle: nil)
             vc = sb.instantiateViewController(withIdentifier: "home")
         }
         window.rootViewController = vc

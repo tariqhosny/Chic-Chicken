@@ -10,15 +10,35 @@ import UIKit
 
 class includesCell: UITableViewCell {
 
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
+    @IBOutlet weak var productImage: UIImageView!
+    @IBOutlet weak var titleLb: UILabel!
+    @IBOutlet weak var priceLb: UILabel!
+    @IBOutlet weak var checkImage: UIImageView!
+    
+    func configure(extra: productsData){
+        titleLb.text = extra.title
+        priceLb.text = "Price: \(extra.price_general ?? "")"
+        let urlWithOutEncoding = ("\(URLs.imageUrl)\(extra.image!)")
+        let encodedLink = urlWithOutEncoding.addingPercentEncoding(withAllowedCharacters: .urlFragmentAllowed)
+        let encodedURL = NSURL(string: encodedLink!)! as URL
+        productImage.kf.indicatorType = .activity
+        if let url = URL(string: "\(encodedURL)"){
+            productImage.kf.setImage(with: url)
+        }
     }
-
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        self.selectionStyle = .none
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+    
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
+        checkImage.image = selected ? #imageLiteral(resourceName: "check") : #imageLiteral(resourceName: "uncheck")
     }
 
 }

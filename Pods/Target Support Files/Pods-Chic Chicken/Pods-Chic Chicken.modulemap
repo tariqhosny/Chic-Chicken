@@ -1,0 +1,6 @@
+framework module Pods_Chic_Chicken {
+  umbrella header "Pods-Chic Chicken-umbrella.h"
+
+  export *
+  module * { export * }
+}

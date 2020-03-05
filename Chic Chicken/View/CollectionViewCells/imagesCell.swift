@@ -14,7 +14,7 @@ class imagesCell: UICollectionViewCell, UIScrollViewDelegate {
     @IBOutlet weak var productImage: UIImageView!
     
     func configureCell(image: String) {
-        let urlWithoutEncoding = ("\(URLs.file_root)\(image)")
+        let urlWithoutEncoding = ("\(URLs.imageUrl)\(image)")
         let encodedLink = urlWithoutEncoding.addingPercentEncoding(withAllowedCharacters: .urlFragmentAllowed)
         let encodedURL = NSURL(string: encodedLink!)! as URL
         productImage.kf.indicatorType = .activity
@@ -23,7 +23,7 @@ class imagesCell: UICollectionViewCell, UIScrollViewDelegate {
         }
     }
     
-    
+                       
     override func awakeFromNib() {
         super.awakeFromNib()
         scroll.delegate = self
