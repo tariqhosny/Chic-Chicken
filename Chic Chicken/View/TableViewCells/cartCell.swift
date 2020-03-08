@@ -23,7 +23,7 @@ class cartCell: UITableViewCell {
     
     func configureCell(product: CartList) {
         productNameLb.text = product.product_name
-        productPriceLb.text = product.total_price_with_addtions
+        productPriceLb.text = "\(product.total_price_with_addtions ?? "")\(helper.getCurrency() ?? "")"
         cartCountLb.text = product.quantity
         let urlWithoutEncoding = ("\(URLs.imageUrl)\(product.image!)")
         let encodedLink = urlWithoutEncoding.addingPercentEncoding(withAllowedCharacters: .urlFragmentAllowed)

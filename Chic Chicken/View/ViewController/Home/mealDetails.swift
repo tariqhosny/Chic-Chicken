@@ -114,12 +114,12 @@ class mealDetails: UIViewController, NVActivityIndicatorViewable {
                         if self.sizes[0].sale_price == ""{
                             self.price = Float(self.sizes[0].price ?? "0") ?? 0
                             self.totalPrice = self.price + self.extraPrice
-                            self.salePriceLb.text = self.sizes[0].price
+                            self.salePriceLb.text = "\(self.sizes[0].price ?? "")\(helper.getCurrency() ?? "")"
                             self.priceView.isHidden = true
                             self.generalPriceLb.isHidden = true
                         }else{
-                            self.salePriceLb.text = self.sizes[0].sale_price
-                            self.generalPriceLb.text = self.sizes[0].price
+                            self.salePriceLb.text = "\(self.sizes[0].sale_price ?? "")\(helper.getCurrency() ?? "")"
+                            self.generalPriceLb.text = "\(self.sizes[0].price ?? "")\(helper.getCurrency() ?? "")"
                             self.price = Float(self.sizes[0].sale_price ?? "0") ?? 0
                             self.totalPrice = self.price + self.extraPrice
                         }
@@ -184,14 +184,14 @@ class mealDetails: UIViewController, NVActivityIndicatorViewable {
     @IBAction func addPressed(_ sender: UIButton) {
         quantity += 1
         quantityLb.text = "\(quantity)"
-        self.salePriceLb.text = "\(self.totalPrice * Float(quantity))"
+        self.salePriceLb.text = "\(self.totalPrice * Float(quantity))\(helper.getCurrency() ?? "")"
     }
     
     @IBAction func minusPressed(_ sender: UIButton) {
         if quantity > 1{
             quantity -= 1
             quantityLb.text = "\(quantity)"
-            self.salePriceLb.text = "\(self.totalPrice * Float(quantity))"
+            self.salePriceLb.text = "\(self.totalPrice * Float(quantity))\(helper.getCurrency() ?? "")"
         }
     }
     
@@ -256,14 +256,14 @@ extension mealDetails: UICollectionViewDelegate, UICollectionViewDataSource, UIC
             if self.sizes[indexPath.item].sale_price == ""{
                 self.price = Float(self.sizes[indexPath.item].price ?? "0") ?? 0
                 self.totalPrice = price + extraPrice
-                self.salePriceLb.text = "\(self.totalPrice * Float(quantity))"
+                self.salePriceLb.text = "\(self.totalPrice * Float(quantity))\(helper.getCurrency() ?? "")"
                 self.priceView.isHidden = true
                 self.generalPriceLb.isHidden = true
             }else{
                 self.price = Float(self.sizes[indexPath.item].sale_price ?? "0") ?? 0
                 self.totalPrice = price + extraPrice
-                self.salePriceLb.text = "\(self.totalPrice * Float(quantity))"
-                self.generalPriceLb.text = self.sizes[indexPath.item].price
+                self.salePriceLb.text = "\(self.totalPrice * Float(quantity))\(helper.getCurrency() ?? "")"
+                self.generalPriceLb.text = "\(self.sizes[indexPath.item].price ?? "")\(helper.getCurrency() ?? "")"
             }
         }else{
             if images.count != 0{
@@ -333,7 +333,7 @@ extension mealDetails: UITableViewDataSource, UITableViewDelegate {
             extraIDs.append(exteras[indexPath.row].id ?? 0)
             extraPrice += Float(exteras[indexPath.row].price_general ?? "0") ?? 0
             self.totalPrice = price + extraPrice
-            self.salePriceLb.text = "\(self.totalPrice * Float(quantity))"
+            self.salePriceLb.text = "\(self.totalPrice * Float(quantity))\(helper.getCurrency() ?? "")"
         }
         print(extraIDs)
     }
@@ -345,7 +345,7 @@ extension mealDetails: UITableViewDataSource, UITableViewDelegate {
                 extraIDs.remove(at: currentIndex)
                 extraPrice -= Float(exteras[indexPath.row].price_general ?? "0") ?? 0
                 self.totalPrice = price + extraPrice
-                self.salePriceLb.text = "\(self.totalPrice * Float(quantity))"
+                self.salePriceLb.text = "\(self.totalPrice * Float(quantity))\(helper.getCurrency() ?? "")"
                 break
             }
             currentIndex += 1

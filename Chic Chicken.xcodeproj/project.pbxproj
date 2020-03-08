@@ -32,8 +32,6 @@
 		5250058F2382AC650030462E /* Menu.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5250058E2382AC650030462E /* Menu.storyboard */; };
 		525005922382B6CD0030462E /* categoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 525005912382B6CD0030462E /* categoryCell.swift */; };
 		525005942382B6EE0030462E /* category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 525005932382B6EE0030462E /* category.swift */; };
-		525005962382DD8A0030462E /* cityCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 525005952382DD8A0030462E /* cityCell.swift */; };
-		525005982382DDB70030462E /* branchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 525005972382DDB70030462E /* branchCell.swift */; };
 		5250059E2382E7680030462E /* menuMeals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5250059D2382E7680030462E /* menuMeals.swift */; };
 		525AC61F23816DFB000D76E4 /* register.swift in Sources */ = {isa = PBXBuildFile; fileRef = 525AC61E23816DFB000D76E4 /* register.swift */; };
 		526B0646240E6070005C6F3F /* sizesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 526B0645240E6070005C6F3F /* sizesCell.swift */; };
@@ -100,8 +98,6 @@
 		5250058E2382AC650030462E /* Menu.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Menu.storyboard; sourceTree = "<group>"; };
 		525005912382B6CD0030462E /* categoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = categoryCell.swift; sourceTree = "<group>"; };
 		525005932382B6EE0030462E /* category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = category.swift; sourceTree = "<group>"; };
-		525005952382DD8A0030462E /* cityCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = cityCell.swift; sourceTree = "<group>"; };
-		525005972382DDB70030462E /* branchCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = branchCell.swift; sourceTree = "<group>"; };
 		5250059D2382E7680030462E /* menuMeals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = menuMeals.swift; sourceTree = "<group>"; };
 		525AC61E23816DFB000D76E4 /* register.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = register.swift; sourceTree = "<group>"; };
 		526B0645240E6070005C6F3F /* sizesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = sizesCell.swift; sourceTree = "<group>"; };
@@ -352,8 +348,6 @@
 		52CEB28D240BED7D002B2621 /* TableViewCells */ = {
 			isa = PBXGroup;
 			children = (
-				525005952382DD8A0030462E /* cityCell.swift */,
-				525005972382DDB70030462E /* branchCell.swift */,
 				52DBB71C2383D3A900C7018B /* includesCell.swift */,
 				52ED90FE2384222700F6658B /* cartCell.swift */,
 				52F79C8B2411052D003FFA8E /* extraCartCell.swift */,
@@ -524,7 +518,6 @@
 				522F20932381852900968B40 /* buttonRound.swift in Sources */,
 				52DBB71B2383D0B400C7018B /* mealDetails.swift in Sources */,
 				52CEB28F240BEEEF002B2621 /* AuthApi.swift in Sources */,
-				525005982382DDB70030462E /* branchCell.swift in Sources */,
 				522F20922381852900968B40 /* viewRound.swift in Sources */,
 				5250058D238297BF0030462E /* sliderCell.swift in Sources */,
 				52ED90FD2384216000F6658B /* cart.swift in Sources */,
@@ -535,7 +528,6 @@
 				52BD1C80238539B0001D1F0F /* more.swift in Sources */,
 				52CEB288240BEB2D002B2621 /* helper.swift in Sources */,
 				52EC2864238A6BDE003CE5FA /* orderList.swift in Sources */,
-				525005962382DD8A0030462E /* cityCell.swift in Sources */,
 				52CEB286240BEB23002B2621 /* URLs.swift in Sources */,
 				52EC286A238A6C99003CE5FA /* orderDetailsCell.swift in Sources */,
 				52F79C8F24115244003FFA8E /* BadgeButton.swift in Sources */,
@@ -709,6 +701,7 @@
 			baseConfigurationReference = 17500BFA3045184B21E97FF1 /* Pods-Chic Chicken.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 4Z34DQ34UQ;
 				INFOPLIST_FILE = "Chic Chicken/Info.plist";
@@ -719,6 +712,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "tariq.Chic-Chicken";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -729,6 +723,7 @@
 			baseConfigurationReference = 71873838A8C99E38B3F5C122 /* Pods-Chic Chicken.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 4Z34DQ34UQ;
 				INFOPLIST_FILE = "Chic Chicken/Info.plist";
@@ -739,6 +734,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "tariq.Chic-Chicken";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};

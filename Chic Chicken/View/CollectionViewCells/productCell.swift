@@ -23,12 +23,12 @@ class productCell: UICollectionViewCell {
     
     func configureCell(product: productsData, fromFavorite: Int){
         if product.sale_price == ""{
-            salePriceLb.text = product.price_general
+            salePriceLb.text = "\(product.price_general ?? "")\(helper.getCurrency() ?? "")"
             priceView.isHidden = true
             generalPriceLb.isHidden = true
         }else{
-            salePriceLb.text = product.sale_price
-            generalPriceLb.text = product.price_general
+            salePriceLb.text = "\(product.sale_price ?? "")\(helper.getCurrency() ?? "")"
+            generalPriceLb.text = "\(product.price_general ?? "")\(helper.getCurrency() ?? "")"
         }
         if fromFavorite == 0{
             isFavorite = product.Wishlist_state ?? 0

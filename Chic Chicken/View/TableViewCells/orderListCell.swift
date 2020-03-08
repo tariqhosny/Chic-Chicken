@@ -23,7 +23,7 @@ class orderListCell: UITableViewCell {
     func configure(order: OrderData){
         orderIdLb.text = "\(order.order_id ?? 0)"
         dateLb.text = order.created_at
-        priceLb.text = order.order_total_price
+        priceLb.text = "\(order.order_total_price ?? "")\(helper.getCurrency() ?? "")"
     }
 
 }

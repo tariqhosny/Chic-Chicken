@@ -22,6 +22,17 @@ class helper: NSObject {
         restartApp()
     }
     
+    class func getCurrency() -> String?{
+        let defUser = UserDefaults.standard
+        return (defUser.object(forKey: "currency") as? String)
+    }
+    
+    class func saveCurrency(token: String){
+        let defUser = UserDefaults.standard
+        defUser.setValue(token, forKey: "currency")
+        defUser.synchronize()
+    }
+    
     class func restartApp(){
         guard let window = UIApplication.shared.keyWindow else {return}
         var vc: UIViewController

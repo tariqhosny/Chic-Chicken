@@ -33,9 +33,9 @@ class orderDetails: UIViewController, NVActivityIndicatorViewable {
     }
     
     func fillData(){
-        taxesLb.text = "\(details.tax ?? 0)"
-        deleveryFeesLb.text = details.delevery_fees
-        totalPriceLb.text = details.order_total_price
+        taxesLb.text = "\(details.tax ?? 0)\(helper.getCurrency() ?? "")"
+        deleveryFeesLb.text = "\(details.delevery_fees ?? "")\(helper.getCurrency() ?? "")"
+        totalPriceLb.text = "\(details.order_total_price ?? "")\(helper.getCurrency() ?? "")"
         addressLb.text = "\(details.customer_country ?? ""), \(details.customer_city ?? ""), \(details.customer_street ?? "")"
         paymentMethodLb.text = "Cash on Deliverd"
     }

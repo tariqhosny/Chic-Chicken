@@ -24,7 +24,7 @@ class orderDetailsCell: UITableViewCell {
 
     func configureCell(order: OrderDetailsData) {
         orderNameLb.text = order.product_name
-        priceLb.text = "Price: \(order.product_price ?? "")"
+        priceLb.text = "Price: \(order.product_price ?? "")\(helper.getCurrency() ?? "")"
         countLb.text = "Quantity: \(order.product_quantity ?? "")"
         let urlWithoutEncoding = ("\(URLs.imageUrl)\(order.image!)")
         let encodedLink = urlWithoutEncoding.addingPercentEncoding(withAllowedCharacters: .urlFragmentAllowed)

@@ -72,6 +72,7 @@ class home: UIViewController, NVActivityIndicatorViewable {
                 if isSuccess!{
                     if let product = product{
                         self.products = product.data!
+                        helper.saveCurrency(token: self.products[0].currency ?? "")
                         self.productsCollectionView.reloadData()
                     }
                     print(product!)

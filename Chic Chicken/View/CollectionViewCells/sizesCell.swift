@@ -18,12 +18,12 @@ class sizesCell: UICollectionViewCell {
     
     func configureCell(sizes: productsData){
         if sizes.sale_price == ""{
-            salePriceLb.text = sizes.price
+            salePriceLb.text = "\(sizes.price ?? "")\(helper.getCurrency() ?? "")"
             priceView.isHidden = true
             generalPriceLb.isHidden = true
         }else{
-            salePriceLb.text = sizes.sale_price
-            generalPriceLb.text = sizes.price
+            salePriceLb.text = "\(sizes.sale_price ?? "")\(helper.getCurrency() ?? "")"
+            generalPriceLb.text = "\(sizes.price ?? "")\(helper.getCurrency() ?? "")"
         }
         sizeNameLb.text = sizes.size
     }

@@ -17,7 +17,7 @@ class includesCell: UITableViewCell {
     
     func configure(extra: productsData){
         titleLb.text = extra.title
-        priceLb.text = "Price: \(extra.price_general ?? "")"
+        priceLb.text = "Price: \(extra.price_general ?? "")\(helper.getCurrency() ?? "")"
         let urlWithOutEncoding = ("\(URLs.imageUrl)\(extra.image!)")
         let encodedLink = urlWithOutEncoding.addingPercentEncoding(withAllowedCharacters: .urlFragmentAllowed)
         let encodedURL = NSURL(string: encodedLink!)! as URL
