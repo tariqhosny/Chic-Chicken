@@ -24,6 +24,16 @@ class orderListCell: UITableViewCell {
         orderIdLb.text = "\(order.order_id ?? 0)"
         dateLb.text = order.created_at
         priceLb.text = "\(order.order_total_price ?? "")\(helper.getCurrency() ?? "")"
+        
+        if Int(order.order_stat!) == 0{
+            orderStateLb.text = "Order in Progress"
+        }
+        if Int(order.order_stat!) == 1{
+            orderStateLb.text = "Order Delivered"
+        }
+        if Int(order.order_stat!) == 2{
+            orderStateLb.text = "Order Canceled"
+        }
     }
 
 }

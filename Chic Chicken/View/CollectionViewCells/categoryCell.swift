@@ -20,7 +20,7 @@ class categoryCell: UICollectionViewCell {
         let encodedURL = NSURL(string: encodedLink!)! as URL
         categoryImage.kf.indicatorType = .activity
         if let url = URL(string: "\(encodedURL)") {
-            categoryImage.kf.setImage(with: url)
+            categoryImage.kf.setImage(with: url,placeholder: UIImage(named: "placeholder"))
         }
     }
 }

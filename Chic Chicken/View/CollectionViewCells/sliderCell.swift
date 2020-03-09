@@ -18,7 +18,7 @@ class sliderCell: UICollectionViewCell {
         let encodedURL = NSURL(string: encodedLink!)! as URL
         sliderImage.kf.indicatorType = .activity
         if let url = URL(string: "\(encodedURL)") {
-            sliderImage.kf.setImage(with: url)
+            sliderImage.kf.setImage(with: url,placeholder: UIImage(named: "placeholder"))
         }
     }
 }

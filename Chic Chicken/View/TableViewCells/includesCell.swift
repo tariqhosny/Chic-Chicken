@@ -23,7 +23,7 @@ class includesCell: UITableViewCell {
         let encodedURL = NSURL(string: encodedLink!)! as URL
         productImage.kf.indicatorType = .activity
         if let url = URL(string: "\(encodedURL)"){
-            productImage.kf.setImage(with: url)
+            productImage.kf.setImage(with: url,placeholder: UIImage(named: "placeholder"))
         }
     }
     

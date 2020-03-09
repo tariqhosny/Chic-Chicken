@@ -31,7 +31,7 @@ class orderDetailsCell: UITableViewCell {
         let encodedURL = NSURL(string: encodedLink!)! as URL
         orderImage.kf.indicatorType = .activity
         if let url = URL(string: "\(encodedURL)") {
-            orderImage.kf.setImage(with: url)
+            orderImage.kf.setImage(with: url,placeholder: UIImage(named: "placeholder"))
         }
     }
     
